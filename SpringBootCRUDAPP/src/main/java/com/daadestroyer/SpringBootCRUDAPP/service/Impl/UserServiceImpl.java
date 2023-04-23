@@ -1,18 +1,19 @@
 package com.daadestroyer.SpringBootCRUDAPP.service.Impl;
 
+import com.daadestroyer.SpringBootCRUDAPP.dto.UserDto;
 import com.daadestroyer.SpringBootCRUDAPP.entity.User;
 import com.daadestroyer.SpringBootCRUDAPP.exceptionhandling.ResourceAlreadyExistedException;
 import com.daadestroyer.SpringBootCRUDAPP.exceptionhandling.ResourceNotFoundException;
 import com.daadestroyer.SpringBootCRUDAPP.repository.UserRepo;
 import com.daadestroyer.SpringBootCRUDAPP.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,36 +21,48 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
-    public User createUser(User user) {
+    public UserDto createUser(UserDto userDto) {
+
+        User user = this.modelMapper.map(userDto, User.class);
         Optional<User> savedUser = this.userRepo.findById(user.getUserId());
         if (savedUser.isPresent()) {
             throw new ResourceAlreadyExistedException("user", user.getUserId());
         }
-        return this.userRepo.save(user);
+        User userSaved = this.userRepo.save(user);
+        return this.modelMapper.map(userSaved, UserDto.class);
+
     }
 
     @Override
-    public List<User> getAllUser() {
-        List<User> listOfUser = this.userRepo.findAll();
-        if (listOfUser.size() == 0) {
+    public List<UserDto> getAllUser() {
+        List<UserDto> listOfUserDto = this.userRepo.findAll().stream().map(user -> this.modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+
+        if (listOfUserDto.size() == 0) {
             throw new ResourceNotFoundException("User List");
         }
-        return listOfUser;
+        return listOfUserDto;
     }
 
     @Override
-    public User getUser(Long userId) {
+    public UserDto getUser(Long userId) {
         User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", userId));
-        return user;
+        UserDto userDto = this.modelMapper.map(user, UserDto.class);
+        return userDto;
     }
 
     @Override
-    public User updateUser(User user) {
+    public UserDto updateUser(UserDto user) {
         User savedUser = this.userRepo.findById(user.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User", user.getUserId()));
-        return this.userRepo.save(user);
-    }
+        User updatedUser = this.userRepo.save(savedUser);
+        UserDto userDto = this.modelMapper.map(updatedUser, UserDto.class);
+        return userDto;
 
+    }
+    
     @Override
     public String deleteUser(Long userId) {
         User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", userId));

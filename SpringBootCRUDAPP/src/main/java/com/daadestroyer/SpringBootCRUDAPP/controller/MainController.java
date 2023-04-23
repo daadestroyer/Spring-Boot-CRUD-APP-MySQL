@@ -1,7 +1,9 @@
 package com.daadestroyer.SpringBootCRUDAPP.controller;
 
+import com.daadestroyer.SpringBootCRUDAPP.dto.UserDto;
 import com.daadestroyer.SpringBootCRUDAPP.entity.User;
 import com.daadestroyer.SpringBootCRUDAPP.service.Impl.UserServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,26 +18,26 @@ public class MainController {
     private UserServiceImpl userService;
 
     @PostMapping("/save-user")
-    public ResponseEntity<?> saveUser(@RequestBody User user) {
-        User savedUser = this.userService.createUser(user);
+    public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto userDto) {
+        UserDto savedUser = this.userService.createUser(userDto);
         return new ResponseEntity<>(savedUser, HttpStatus.OK);
     }
 
     @GetMapping("/get-all-user")
     public ResponseEntity<?> getAllUser() {
-        List<User> allUser = this.userService.getAllUser();
+        List<UserDto> allUser = this.userService.getAllUser();
         return new ResponseEntity<>(allUser, HttpStatus.OK);
     }
 
     @GetMapping("/get-user/{userId}")
     public ResponseEntity<?> getUser(@PathVariable Long userId) {
-        User user = this.userService.getUser(userId);
+        UserDto user = this.userService.getUser(userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/update-user/{userId}")
-    public ResponseEntity<?> updateUser(@RequestBody User user) {
-        User updatedUser = this.userService.updateUser(user);
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserDto userDto) {
+        UserDto updatedUser = this.userService.updateUser(userDto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 

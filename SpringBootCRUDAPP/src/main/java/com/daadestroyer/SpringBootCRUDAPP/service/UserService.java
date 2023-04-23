@@ -1,17 +1,18 @@
 package com.daadestroyer.SpringBootCRUDAPP.service;
 
+import com.daadestroyer.SpringBootCRUDAPP.dto.UserDto;
 import com.daadestroyer.SpringBootCRUDAPP.entity.User;
 
 import java.util.List;
 
 public interface UserService {
-    public User createUser(User user);
+    public UserDto createUser(UserDto userDto);
 
-    public List<User> getAllUser();
+    public List<UserDto> getAllUser();
 
-    public User getUser(Long userId);
+    public UserDto getUser(Long userId);
 
-    public User updateUser(User user);
+    public UserDto updateUser(UserDto userDto);
 
     public String deleteUser(Long userId);
 }
