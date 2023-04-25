@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,8 @@ public class MainController {
             responseCode = "201",
             description = "HttpStatus 201 Created"
     )
+    // http://localhost:8080/save-user
+
     @PostMapping("/save-user")
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto userDto) {
         UserDto savedUser = this.userService.createUser(userDto);
@@ -46,6 +49,7 @@ public class MainController {
             responseCode = "201",
             description = "HttpStatus 201 Created"
     )
+    // http://localhost:8080/get-all-user
     @GetMapping("/get-all-user")
     public ResponseEntity<?> getAllUser() {
         List<UserDto> allUser = this.userService.getAllUser();
@@ -60,6 +64,7 @@ public class MainController {
             responseCode = "201",
             description = "HttpStatus 201 Created"
     )
+    // http://localhost:8080/get-user/2222
     @GetMapping("/get-user/{userId}")
     public ResponseEntity<?> getUser(@PathVariable Long userId) {
         UserDto user = this.userService.getUser(userId);
@@ -74,6 +79,7 @@ public class MainController {
             responseCode = "201",
             description = "HttpStatus 201 Created"
     )
+    // http://localhost:8080/update-user/2222
     @PutMapping("/update-user/{userId}")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserDto userDto) {
         UserDto updatedUser = this.userService.updateUser(userDto);
@@ -88,6 +94,7 @@ public class MainController {
             responseCode = "201",
             description = "HttpStatus 201 Created"
     )
+    // http://localhost:8080/delete-user/22222
     @DeleteMapping("/delete-user/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         String message = this.userService.deleteUser(userId);
