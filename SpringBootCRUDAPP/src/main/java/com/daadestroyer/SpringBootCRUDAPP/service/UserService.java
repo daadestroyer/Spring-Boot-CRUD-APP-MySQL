@@ -12,7 +12,7 @@ public interface UserService {
 
     public UserDto getUser(Long userId);
 
-    public UserDto updateUser(UserDto userDto);
+    public UserDto updateUser(User user);
 
     public String deleteUser(Long userId);
 }

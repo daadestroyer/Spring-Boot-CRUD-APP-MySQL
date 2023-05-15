@@ -55,12 +55,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UserDto user) {
+    public UserDto updateUser(User user) {
         User savedUser = this.userRepo.findById(user.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User", user.getUserId()));
-        User updatedUser = this.userRepo.save(savedUser);
-        UserDto userDto = this.modelMapper.map(updatedUser, UserDto.class);
-        return userDto;
 
+        savedUser.setUserId(user.getUserId());
+        savedUser.setFirstName(user.getFirstName());
+        savedUser.setLastName(user.getLastName());
+        savedUser.setEmail(user.getEmail());
+        User save = this.userRepo.save(savedUser);
+        return this.modelMapper.map(save,UserDto.class);
     }
     
     @Override
@@ -70,4 +73,7 @@ public class UserServiceImpl implements UserService {
         return "User with id " + userId + " deleted";
     }
 
+    public User saveUser(User user){
+        return this.userRepo.save(user);
+    }
 }

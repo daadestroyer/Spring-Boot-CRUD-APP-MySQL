@@ -10,7 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,9 +36,12 @@ public class MainController {
     // http://localhost:8080/save-user
 
     @PostMapping("/save-user")
-    public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto userDto) {
-        UserDto savedUser = this.userService.createUser(userDto);
-        return new ResponseEntity<>(savedUser, HttpStatus.OK);
+    public ResponseEntity<?> saveUser(@Valid @RequestBody User user) {
+//        UserDto savedUser = this.userService.createUser(userDto);
+//        return new ResponseEntity<>(savedUser, HttpStatus.OK);
+
+        User savedUser = this.userService.saveUser(user);
+        return new ResponseEntity<>(savedUser,HttpStatus.OK);
     }
 
     @Operation(
@@ -80,9 +83,9 @@ public class MainController {
             description = "HttpStatus 201 Created"
     )
     // http://localhost:8080/update-user/2222
-    @PutMapping("/update-user/{userId}")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UserDto userDto) {
-        UserDto updatedUser = this.userService.updateUser(userDto);
+    @PutMapping("/update-user")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody User user) {
+        UserDto updatedUser = this.userService.updateUser(user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
